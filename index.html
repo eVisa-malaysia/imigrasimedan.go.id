@@ -3,429 +3,643 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Permohonan Paspor</title>
+    <title>Permohonan Online Keimigrasian Indonesia 2025</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Font Awesome untuk Ikon */
-        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+        :root {
+            --primary-blue: #003366;
+            --secondary-blue: #0055a4;
+            --light-blue: #e6f2ff;
+            --gold: #d4af37;
+            --dark-gold: #b8941f;
+            --gray: #f5f5f5;
+        }
 
-        /* Gaya Umum */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
+            background-color: #f0f4f8;
             color: #333;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Gaya Modal (Popup) */
-        .modal {
-            display: block; /* Langsung tampil */
-            position: fixed;
-            z-index: 1000; /* Modal utama */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.6);
-            animation: fadeIn 0.4s;
+        .header {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Gaya untuk Modal Pembayaran (di atas modal utama) */
-        .payment-modal {
-            z-index: 2000; /* Lebih tinggi dari modal utama */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-container img {
+            height: 80px;
+            margin-right: 15px;
+        }
+
+        .title-container {
+            text-align: center;
+        }
+
+        .title-container h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        .title-container p {
+            font-size: 1rem;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .form-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-title {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-blue);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--secondary-blue);
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 12px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 0.2rem rgba(0, 85, 164, 0.25);
+        }
+
+        .option-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-card:hover {
+            background-color: var(--light-blue);
+            border-color: var(--secondary-blue);
+        }
+
+        .option-card.selected {
+            background-color: var(--light-blue);
+            border-color: var(--secondary-blue);
+            border-width: 2px;
+        }
+
+        .option-card i {
+            color: var(--secondary-blue);
+            margin-right: 10px;
+        }
+
+        .additional-form {
+            display: none;
+            animation: fadeIn 0.5s;
         }
 
         @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Konten Modal */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 0;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            animation: slideIn 0.4s;
-            overflow: hidden;
-        }
-        
-        @keyframes slideIn {
-            from {transform: translateY(-50px); opacity: 0;}
-            to {transform: translateY(0); opacity: 1;}
+        .btn-primary {
+            background-color: var(--secondary-blue);
+            border-color: var(--secondary-blue);
+            padding: 12px 25px;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
         }
 
-        /* Header Modal */
-        .modal-header {
-            background-color: #004a99;
+        .btn-primary:hover {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn-loading .loading-spinner {
+            display: inline-block;
+        }
+
+        .btn-loading .btn-text {
+            display: none;
+        }
+
+        .footer {
+            background-color: var(--primary-blue);
             color: white;
-            padding: 15px 20px;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        .footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            margin-top: 10px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .info-box {
+            background-color: var(--light-blue);
+            border-left: 4px solid var(--secondary-blue);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box i {
+            color: var(--secondary-blue);
+            margin-right: 10px;
+        }
+
+        /* Modal Styles */
+        .modal-header {
+            background-color: var(--primary-blue);
+            color: white;
             display: flex;
-            justify-content: space-between;
             align-items: center;
         }
 
-        .modal-header h2 {
-            margin: 0;
-            font-size: 18px;
+        .modal-logo {
+            height: 40px;
+            margin-right: 15px;
+        }
+
+        .modal-title {
             font-weight: 600;
         }
 
-        .modal-header .logo {
-            height: 40px;
+        .btn-close {
+            filter: invert(1);
         }
 
-        /* Tombol Tutup (X) */
-        .close-btn {
-            color: white;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .close-btn:hover, .close-btn:focus { color: #ccc; }
-
-        /* Body Modal */
-        .modal-body {
-            padding: 20px;
-        }
-        
-        .detail-section {
-            margin-bottom: 20px;
-        }
-        .detail-section h3 {
-            margin-top: 0;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            font-size: 16px;
-            color: #004a99;
-        }
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .detail-item:last-child { border-bottom: none; }
-        .detail-label { font-weight: bold; color: #555; }
-        .detail-value { text-align: right; max-width: 60%; word-wrap: break-word; }
-        
-        /* Status Berhasil */
-        .status-success {
-            background-color: #28a745;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            border-radius: 8px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .status-success i { margin-right: 8px; }
-
-        /* Tombol Aksi */
-        .action-button {
-            width: 100%;
-            padding: 15px;
-            background-color: #ff9800;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .action-button:hover { background-color: #e68900; transform: translateY(-2px); }
-        .action-button:disabled { background-color: #cccccc; cursor: not-allowed; transform: none; }
-
-        /* Animasi Loading Spinner */
-        .spinner {
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 3px solid #fff;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .qr-code-container { text-align: center; margin-top: 20px; }
-        .qr-code-container img { max-width: 150px; border: 1px solid #ddd; padding: 5px; }
-
-        /* Gaya Khusus untuk Popup Pembayaran */
-        .payment-code-container {
-            background-color: #eef7ff;
-            border: 2px dashed #007bff;
+        .payment-summary {
+            background-color: var(--gray);
             padding: 15px;
             border-radius: 8px;
-            text-align: center;
-            margin: 20px 0;
+            margin-bottom: 20px;
         }
-        .payment-code-label {
-            font-size: 14px;
+
+        .payment-summary dt {
+            font-weight: 600;
             color: #555;
-            margin-bottom: 5px;
         }
-        #paymentCode {
-            font-size: 24px;
-            font-weight: bold;
-            color: #0056b3;
-            letter-spacing: 2px;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        .copy-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.3s;
-        }
-        .copy-btn:hover { background-color: #0056b3; }
 
-        .timer-container {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 15px;
-            border-radius: 8px;
+        .payment-details {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .payment-details .amount {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--secondary-blue);
+        }
+
+        .payment-details .code {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        #countdown-timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d9534f;
             text-align: center;
             margin: 20px 0;
         }
-        .timer-label {
-            font-size: 16px;
-            color: #856404;
-            margin-bottom: 5px;
-        }
-        #countdown {
-            font-size: 28px;
-            font-weight: bold;
-            color: #d63031;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        
-        .disclaimer {
-            font-size: 12px;
-            color: #6c757d;
-            text-align: center;
-            margin-top: 15px;
+
+        .timer-warning {
+            animation: pulse 1s infinite;
         }
 
-        .warning-text {
-            font-size: 13px;
-            color: #d63031;
-            font-weight: bold;
-            text-align: center;
-            background-color: #ffebee;
-            border: 1px solid #f8bbd9;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 20px;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
-        /* Responsif */
-        @media (max-width: 480px) {
-            .modal-content { margin: 0; width: 100%; height: 100%; border-radius: 0; max-width: 100%; }
-            .modal-header h2 { font-size: 16px; }
-            .detail-item { flex-direction: column; align-items: flex-start; }
-            .detail-value { text-align: left; margin-top: 5px; max-width: 100%; }
+        @media (max-width: 768px) {
+            .title-container h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-card {
+                padding: 20px 15px;
+            }
+
+            #countdown-timer {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-
-    <!-- Modal/Popup Utama (Detail Permohonan) -->
-    <div id="popupModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <img src="https://via.placeholder.com/120x40.png?text=Logo+Imigrasi" alt="Logo Ditjen Imigrasi" class="logo">
-                <h2>Detail Permohonan M - Paspor</h2>
-                <button class="close-btn" onclick="closeMainModal()">&times;</button>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="https://z-cdn-media.chatglm.cn/files/56bb7c29-5153-4ec4-8fc6-e4ec53f9734c.png?auth_key=1866561462-797362f6d061402eabc8fe7c0130905d-0-c7b38fd90671ff7068c6ed719fe735ec" alt="Logo Ditjen Imigrasi">
             </div>
-            <div class="modal-body">
-                <div class="status-success"><i class="fas fa-check-circle"></i> SUDAH TERBAYAR</div>
-                <div class="detail-section">
-                    <h3>Informasi Layanan</h3>
-                    <div class="detail-item"><span class="detail-label">Kode Layanan:</span><span class="detail-value">XH - RQS89Z</span></div>
-                    <div class="detail-item"><span class="detail-label">Lokasi:</span><span class="detail-value">KANTOR IMIGRASI MEDAN</span></div>
-                    <div class="detail-item"><span class="detail-label">Tanggal:</span><span class="detail-value">Kamis, 18 Desember 2025</span></div>
-                    <div class="detail-item"><span class="detail-label">Waktu:</span><span class="detail-value">08:01 - 09:00 WIB</span></div>
+            <div class="title-container">
+                <h1>Permohonan Online Keimigrasian Indonesia 2025</h1>
+                <p>Sistem Layanan Permohonan Perubahan Data Paspor</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="form-card">
+            <h2 class="form-title"><i class="fas fa-passport"></i> Permohonan Perubahan Data Paspor</h2>
+            
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i>
+                <span>Silakan pilih jenis permohonan yang Anda butuhkan dan lengkapi formulir di bawah ini untuk mendaftar secara online.</span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Pilih Jenis Permohonan:</label>
+                <div class="option-card" data-option="name-change">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Perubahan Nama</span>
                 </div>
-                <div class="detail-section">
-                    <h3>Informasi Pemohon</h3>
-                    <div class="detail-item"><span class="detail-label">Nama:</span><span class="detail-value">RASYDAN GHAFFARI R</span></div>
-                    <div class="detail-item"><span class="detail-label">NIK:</span><span class="detail-value">12711282705070004</span></div>
-                    <div class="detail-item"><span class="detail-label">Jenis Permohonan:</span><span class="detail-value">Paspor Baru (e-Paspor 5 Tahun)</span></div>
-                    <div class="detail-item"><span class="detail-label">Biaya:</span><span class="detail-value">Rp 650.000</span></div>
+                <div class="option-card" data-option="name-removal">
+                    <i class="fas fa-eraser"></i>
+                    <span>Penghapusan Nama</span>
                 </div>
-                <button id="expediteBtn" class="action-button">Ajukan Layanan Percepatan</button>
-                <div class="qr-code-container">
-                    <p><small>Tunjukkan QR Code ini ke petugas saat check-in</small></p>
-                    <img src="https://via.placeholder.com/150x150.png?text=QR+Code" alt="QR Code Permohonan">
+                <div class="option-card" data-option="upgrade">
+                    <i class="fas fa-level-up-alt"></i>
+                    <span>Upgrade</span>
+                </div>
+                <div class="option-card" data-option="name-addition">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Penambahan Nama</span>
+                </div>
+                <div class="option-card" data-option="other">
+                    <i class="fas fa-ellipsis-h"></i>
+                    <span>Lainnya</span>
+                </div>
+            </div>
+
+            <div class="additional-form">
+                <div class="form-group">
+                    <label for="original-name" class="form-label">Nama Asli:</label>
+                    <input type="text" class="form-control" id="original-name" placeholder="Masukkan nama asli Anda">
+                </div>
+
+                <div class="form-group">
+                    <label for="additional-name" class="form-label">Nama Tambahan (Opsional):</label>
+                    <input type="text" class="form-control" id="additional-name" placeholder="Masukkan nama tambahan (jika ada)">
+                </div>
+
+                <div class="form-group">
+                    <label for="name-to-remove" class="form-label">Nama yang Akan Dihapus (Opsional):</label>
+                    <input type="text" class="form-control" id="name-to-remove" placeholder="Masukkan nama yang akan dihapus (jika ada)">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" class="form-label">Nomor Telepon:</label>
+                    <input type="tel" class="form-control" id="phone" placeholder="Masukkan nomor telepon aktif">
+                </div>
+
+                <div class="form-group">
+                    <label for="nik" class="form-label">NIK/KTP:</label>
+                    <input type="text" class="form-control" id="nik" placeholder="Masukkan nomor NIK/KTP">
+                </div>
+
+                <div class="form-group">
+                    <label for="passport-number" class="form-label">Nomor Paspor:</label>
+                    <input type="text" class="form-control" id="passport-number" placeholder="Masukkan nomor paspor">
+                </div>
+
+                <div class="form-group">
+                    <label for="arrival-date" class="form-label">Tanggal Kedatangan:</label>
+                    <input type="date" class="form-control" id="arrival-date">
+                </div>
+
+                <div class="form-group">
+                    <label for="destination-office" class="form-label">Kantor Imigrasi Tujuan:</label>
+                    <input type="text" class="form-control" id="destination-office" placeholder="Masukkan nama kantor imigrasi tujuan">
+                </div>
+
+                <button class="btn btn-primary" id="continue-btn">
+                    <span class="loading-spinner"></span>
+                    <span class="btn-text">Lanjut ke Pembayaran</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Payment Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img src="https://z-cdn-media.chatglm.cn/files/56bb7c29-5153-4ec4-8fc6-e4ec53f9734c.png?auth_key=1866561462-797362f6d061402eabc8fe7c0130905d-0-c7b38fd90671ff7068c6ed719fe735ec" alt="Logo Ditjen Imigrasi" class="modal-logo">
+                    <h5 class="modal-title" id="paymentModalLabel">
+                        <i class="fas fa-credit-card"></i> Detail Pembayaran
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="payment-summary">
+                        <h6>Rincian Permohonan:</h6>
+                        <dl class="row">
+                            <dt class="col-sm-4">Jenis Permohonan:</dt>
+                            <dd class="col-sm-8" id="summary-type">-</dd>
+                            
+                            <dt class="col-sm-4">Nama Asli:</dt>
+                            <dd class="col-sm-8" id="summary-name">-</dd>
+                            
+                            <dt class="col-sm-4">No. Paspor:</dt>
+                            <dd class="col-sm-8" id="summary-passport">-</dd>
+                            
+                            <dt class="col-sm-4">Kantor Tujuan:</dt>
+                            <dd class="col-sm-8" id="summary-office">-</dd>
+                            
+                            <dt class="col-sm-4">Tgl. Kedatangan:</dt>
+                            <dd class="col-sm-8" id="summary-date">-</dd>
+                        </dl>
+                    </div>
+
+                    <div class="payment-details">
+                        <p><strong>Nominal Pembayaran:</strong></p>
+                        <p class="amount">Rp 503.500,00</p>
+                        
+                        <p><strong>Kode Pembayaran:</strong></p>
+                        <div class="d-flex align-items-center">
+                            <p class="code mb-0 me-2" id="payment-code">910266000001679889</p>
+                            <button class="btn btn-sm btn-outline-secondary" id="copy-code-btn">
+                                <i class="fas fa-copy"></i> Salin
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning" role="alert">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Perhatian!</strong> Segera lakukan pembayaran. Batas waktu pembayaran Anda adalah:
+                    </div>
+                    
+                    <div id="countdown-timer">02:00:00</div>
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-success" style="font-size: 1.1rem; padding: 10px 30px;">
+                            <i class="fas fa-check-circle"></i> Saya Sudah Bayar
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal/Popup Pembayaran (Tersembunyi) -->
-    <div id="paymentModal" class="modal payment-modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Pembayaran Layanan Percepatan</h2>
-                <button class="close-btn" onclick="closePaymentModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="detail-section">
-                    <h3>Detail Pembayaran</h3>
-                    <div class="detail-item"><span class="detail-label">Nama Pemohon:</span><span class="detail-value">RASYDAN GHAFFARI R</span></div>
-                    <div class="detail-item"><span class="detail-label">Jumlah Pembayaran:</span><span class="detail-value">Rp 503.500,00</span></div>
-                </div>
-
-                <div class="payment-code-container">
-                    <div class="payment-code-label">Kode Pembayaran Virtual Account</div>
-                    <div id="paymentCode">910266000001621055</div>
-                    <button class="copy-btn" onclick="copyPaymentCode()"><i class="fas fa-copy"></i> Salin Kode</button>
-                </div>
-
-                <div class="timer-container">
-                    <div class="timer-label">Batas Waktu Pembayaran</div>
-                    <div id="countdown">--:--:--</div>
-                </div>
-
-                <p class="disclaimer"><em>Proses ini via sponsor dan Anda dijamin sepenuhnya oleh akun agency sponsor.</em></p>
-
-                <div class="warning-text">
-                    <i class="fas fa-exclamation-triangle"></i> PERINGATAN: Pembayaran HARUS dilakukan sebelum batas waktu habis. Jika tidak, data permohonan sebelumnya akan OTOMATIS DITOLAK oleh sistem dan permohonan secara otomatis akan HANGUS sesuai dengan Undang-Undang Keimigrasian Republik Indonesia.
-                </div>
-            </div>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Direktorat Jenderal Imigrasi Republik Indonesia</p>
+            <p class="copyright">Hak Cipta Dilindungi Undang-Undang</p>
         </div>
-    </div>
+    </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Elemen Modal
-        const mainModal = document.getElementById("popupModal");
-        const paymentModal = document.getElementById("paymentModal");
-        const expediteBtn = document.getElementById("expediteBtn");
-        const countdownEl = document.getElementById('countdown');
-        const paymentCodeEl = document.getElementById('paymentCode');
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Constants and Variables ---
+            const PAYMENT_START_KEY = 'paymentStartTime';
+            const PAYMENT_DURATION_SECONDS = 2 * 60 * 60; // 2 hours
+            let timerInterval = null;
 
-        let timerInterval;
+            // --- DOM Elements ---
+            const optionCards = document.querySelectorAll('.option-card');
+            const additionalForm = document.querySelector('.additional-form');
+            const continueBtn = document.getElementById('continue-btn');
+            const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            const countdownTimerEl = document.getElementById('countdown-timer');
+            const copyCodeBtn = document.getElementById('copy-code-btn');
+            const paymentCodeEl = document.getElementById('payment-code');
 
-        // Fungsi untuk menutup modal utama
-        function closeMainModal() {
-            mainModal.style.display = "none";
-        }
+            // --- Functions ---
 
-        // Fungsi untuk menutup modal pembayaran
-        function closePaymentModal() {
-            paymentModal.style.display = "none";
-        }
-
-        // Klik di luar modal untuk menutup
-        window.onclick = function(event) {
-            if (event.target == mainModal) {
-                closeMainModal();
-            }
-            if (event.target == paymentModal) {
-                closePaymentModal();
-            }
-        }
-
-        // Logika untuk Tombol Layanan Percepatan
-        expediteBtn.onclick = function() {
-            // Cek apakah deadline sudah ada di localStorage
-            if (!localStorage.getItem('paymentDeadline')) {
-                // Jika belum, atur deadline 2 jam dari sekarang
-                const deadline = new Date().getTime() + (2 * 60 * 60 * 1000);
-                localStorage.setItem('paymentDeadline', deadline);
+            /**
+             * Memulai sesi pembayaran dan menampilkan modal.
+             */
+            function startPaymentSession() {
+                localStorage.setItem(PAYMENT_START_KEY, Date.now().toString());
+                updateCountdown(); // Update immediately
+                timerInterval = setInterval(updateCountdown, 1000);
             }
 
-            // Tampilkan animasi loading di tombol utama
-            expediteBtn.innerHTML = '<div class="spinner"></div> Memproses...';
-            expediteBtn.disabled = true;
-
-            // Simulasi proses async, lalu tampilkan popup pembayaran
-            setTimeout(() => {
-                expediteBtn.innerHTML = 'Ajukan Layanan Percepatan';
-                expediteBtn.disabled = false;
-                paymentModal.style.display = "block";
-                startTimer();
-            }, 1500); // Delay 1.5 detik
-        }
-
-        // Fungsi untuk Timer
-        function startTimer() {
-            // Hentikan timer yang lama jika ada
-            clearInterval(timerInterval);
-
-            timerInterval = setInterval(function() {
-                const now = new Date().getTime();
-                const deadline = localStorage.getItem('paymentDeadline');
-                
-                if (!deadline) {
-                    countdownEl.innerHTML = "Timer tidak aktif";
+            /**
+             * Memperbarui tampilan timer hitung mundur.
+             */
+            function updateCountdown() {
+                const startTime = parseInt(localStorage.getItem(PAYMENT_START_KEY));
+                if (isNaN(startTime)) {
                     clearInterval(timerInterval);
                     return;
                 }
 
-                const distance = deadline - now;
+                const currentTime = Date.now();
+                const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
+                const remainingSeconds = PAYMENT_DURATION_SECONDS - elapsedSeconds;
 
-                if (distance < 0) {
+                if (remainingSeconds <= 0) {
                     clearInterval(timerInterval);
-                    localStorage.removeItem('paymentDeadline');
-                    countdownEl.innerHTML = "WAKTU HABIS";
-                    countdownEl.style.color = "grey";
-                    // Opsional: nonaktifkan tombol salin
-                    document.querySelector('.copy-btn').disabled = true;
+                    countdownTimerEl.textContent = 'Waktu Habis';
+                    countdownTimerEl.classList.remove('timer-warning');
+                    localStorage.removeItem(PAYMENT_START_KEY);
+                    document.querySelector('.btn-success').disabled = true;
+                    document.querySelector('.btn-success').textContent = 'Sesi Pembayaran Berakhir';
                 } else {
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    const hours = Math.floor(remainingSeconds / 3600);
+                    const minutes = Math.floor((remainingSeconds % 3600) / 60);
+                    const seconds = remainingSeconds % 60;
                     
-                    countdownEl.innerHTML = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    const display = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    countdownTimerEl.textContent = display;
+
+                    if (remainingSeconds < 600) { // Less than 10 minutes
+                        countdownTimerEl.classList.add('timer-warning');
+                    } else {
+                        countdownTimerEl.classList.remove('timer-warning');
+                    }
                 }
-            }, 1000);
-        }
-        
-        // Fungsi untuk Menyalin Kode Pembayaran
-        function copyPaymentCode() {
-            const paymentCode = paymentCodeEl.innerText;
-            navigator.clipboard.writeText(paymentCode).then(() => {
-                const copyBtn = document.querySelector('.copy-btn');
-                const originalText = copyBtn.innerHTML;
-                copyBtn.innerHTML = '<i class="fas fa-check"></i> Tersalin!';
-                setTimeout(() => {
-                    copyBtn.innerHTML = originalText;
-                }, 2000); // Kembalikan teks setelah 2 detik
-            }).catch(err => {
-                console.error('Gagal menyalin teks: ', err);
-                alert('Gagal menyalin kode, silakan salin secara manual.');
-            });
-        }
-
-        // Jalankan timer saat halaman dimuat jika deadline ada
-        window.onload = function() {
-            if (localStorage.getItem('paymentDeadline')) {
-                // Jangan tampilkan popupnya, tapi pastikan timer berjalan di background
-                // jika user membuka kembali popup pembayaran
-                startTimer();
             }
-        }
 
+            /**
+             * Memeriksa apakah ada sesi pembayaran yang aktif saat halaman dimuat.
+             */
+            function checkPaymentSession() {
+                const startTime = localStorage.getItem(PAYMENT_START_KEY);
+                if (startTime) {
+                    const elapsedSeconds = Math.floor((Date.now() - parseInt(startTime)) / 1000);
+                    if (elapsedSeconds < PAYMENT_DURATION_SECONDS) {
+                        paymentModal.show();
+                        startPaymentSession();
+                    } else {
+                        localStorage.removeItem(PAYMENT_START_KEY);
+                    }
+                }
+            }
+
+            /**
+             * Mengisi data ringkasan di modal pembayaran.
+             */
+            function populatePaymentSummary() {
+                const selectedOption = document.querySelector('.option-card.selected');
+                const optionText = selectedOption ? selectedOption.querySelector('span').textContent : 'Tidak dipilih';
+                
+                document.getElementById('summary-type').textContent = optionText;
+                document.getElementById('summary-name').textContent = document.getElementById('original-name').value || '-';
+                document.getElementById('summary-passport').textContent = document.getElementById('passport-number').value || '-';
+                document.getElementById('summary-office').textContent = document.getElementById('destination-office').value || '-';
+                
+                const arrivalDate = document.getElementById('arrival-date').value;
+                if (arrivalDate) {
+                    const date = new Date(arrivalDate);
+                    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                    document.getElementById('summary-date').textContent = date.toLocaleDateString('id-ID', options);
+                } else {
+                    document.getElementById('summary-date').textContent = '-';
+                }
+            }
+
+            /**
+             * Validasi sederhana untuk form.
+             */
+            function validateForm() {
+                const requiredFields = ['original-name', 'phone', 'nik', 'passport-number', 'arrival-date', 'destination-office'];
+                for (const fieldId of requiredFields) {
+                    if (!document.getElementById(fieldId).value.trim()) {
+                        alert(`Harap lengkapi semua field yang wajib diisi.`);
+                        document.getElementById(fieldId).focus();
+                        return false;
+                    }
+                }
+                if (!document.querySelector('.option-card.selected')) {
+                    alert('Harap pilih jenis permohonan.');
+                    return false;
+                }
+                return true;
+            }
+
+            // --- Event Listeners ---
+
+            // Handle option card selection
+            optionCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    optionCards.forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    additionalForm.style.display = 'block';
+                    setTimeout(() => {
+                        additionalForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                });
+            });
+
+            // Handle continue button click
+            continueBtn.addEventListener('click', function() {
+                if (!validateForm()) {
+                    return;
+                }
+
+                this.classList.add('btn-loading');
+                
+                setTimeout(() => {
+                    this.classList.remove('btn-loading');
+                    populatePaymentSummary();
+                    startPaymentSession();
+                    paymentModal.show();
+                }, 1500);
+            });
+
+            // Handle copy code button click
+            copyCodeBtn.addEventListener('click', function() {
+                const codeText = paymentCodeEl.textContent;
+                
+                // Use the modern Clipboard API
+                navigator.clipboard.writeText(codeText).then(() => {
+                    // Provide visual feedback
+                    const originalHTML = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check"></i> Tersalin!';
+                    this.classList.remove('btn-outline-secondary');
+                    this.classList.add('btn-success', 'disabled');
+                    
+                    // Revert button after 2 seconds
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                        this.classList.remove('btn-success', 'disabled');
+                        this.classList.add('btn-outline-secondary');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Gagal menyalin teks: ', err);
+                    alert('Gagal menyalin kode. Silakan salin secara manual.');
+                });
+            });
+
+            // --- Initial Check ---
+            checkPaymentSession();
+        });
     </script>
-
 </body>
 </html>
